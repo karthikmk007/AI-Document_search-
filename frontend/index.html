@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Document Intelligence</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>AI Document Intelligence</h1>
+    <p>Upload knowledge articles, search them, summarise, and ask questions.</p>
+  </header>
+
+  <main>
+    <section class="card" id="upload-card">
+      <h2>Upload Document</h2>
+      <form id="upload-form">
+        <label for="upload-file">Choose a UTF-8 text file</label>
+        <input type="file" id="upload-file" name="file" accept=".txt,.md,.json" required>
+        <button type="submit">Upload</button>
+        <p id="upload-status" class="status"></p>
+      </form>
+    </section>
+
+    <section class="card" id="search-card">
+      <h2>Search</h2>
+      <form id="search-form">
+        <label for="search-query">Natural language query</label>
+        <input type="text" id="search-query" placeholder="e.g. How do summaries work?" required>
+        <button type="submit">Search</button>
+      </form>
+      <ul id="search-results" class="list"></ul>
+    </section>
+
+    <section class="card" id="documents-card">
+      <h2>Documents</h2>
+      <button id="refresh-documents">Refresh list</button>
+      <ul id="document-list" class="list"></ul>
+    </section>
+
+    <section class="card" id="document-detail" hidden>
+      <div class="detail-header">
+        <h2 id="detail-title"></h2>
+        <button id="close-detail">Close</button>
+      </div>
+      <p id="detail-meta" class="meta"></p>
+      <article id="detail-text"></article>
+      <div class="summary">
+        <h3>Summary</h3>
+        <button id="fetch-summary">Generate summary</button>
+        <ul id="summary-list"></ul>
+      </div>
+      <div class="qa">
+        <h3>Ask a question</h3>
+        <form id="qa-form">
+          <label for="qa-question">Question</label>
+          <input type="text" id="qa-question" placeholder="What is the key message?" required>
+          <button type="submit">Ask</button>
+        </form>
+        <div id="qa-response" class="qa-response"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Backend must run on <code>http://localhost:8000</code>. Update <code>frontend/app.js</code> if you deploy elsewhere.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

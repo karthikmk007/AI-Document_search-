@@ -1,0 +1,1 @@
+AI Document Intelligence helps teams understand large text collections. It supports ingestion, semantic-style search, extractive question answering, and summarisation. Use the API to upload plaintext knowledge base articles or meeting notes, then query them for answers. Each response includes a short snippet so you can quickly verify the context.
