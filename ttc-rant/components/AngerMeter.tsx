@@ -32,7 +32,7 @@ export default function AngerMeter({ initialUp, initialDown }: { initialUp: numb
             : 'bg-white hover:bg-red-50 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
         }`}
       >
-        I'm Late ({upvotes}) 😡
+        I&apos;m Late ({upvotes}) 😡
       </button>
       <button
         onClick={() => handleVote('down')}
