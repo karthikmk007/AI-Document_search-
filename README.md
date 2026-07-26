@@ -1,75 +1,66 @@
 # AI Document Intelligence
 
-AI Document Intelligence is a lightweight knowledge management stack that lets you ingest plain-text documents, search them with natural language prompts, extract short summaries, and answer task-oriented questions. A FastAPI backend handles ingestion, storage, search, and extractive Q&A. A static HTML/JS client offers a simple dashboard for interacting with the service.
+A local document-search application with a FastAPI backend and a lightweight HTML/JavaScript client. It supports text ingestion, keyword-based retrieval, extractive summaries, and extractive question answering without requiring a hosted LLM.
 
-## Project layout
+## Features
 
+- ingest text through JSON or UTF-8 file upload;
+- persist document content and metadata locally;
+- search documents with relevance scores;
+- generate extractive sentence summaries;
+- answer questions using sentence overlap;
+- inspect and test the REST API through OpenAPI docs.
+
+> The current implementation uses deterministic text analysis—not embeddings, semantic vector search, or generative AI. That makes it inexpensive and easy to run, but less capable on paraphrases and complex questions.
+
+## Architecture
+
+```text
+Static web client
+       │ REST
+       ▼
+FastAPI routes
+       │
+Intelligence service
+       ├── local document repository
+       └── deterministic text analytics
 ```
-AI-Document /
-├── backend/            # FastAPI application and services
-├── data/documents/     # Persisted document payloads and metadata index
-├── frontend/           # Static client that talks to the backend REST API
-└── README.md
+
+## Run locally
+
+```bash
+git clone https://github.com/karthikmk007/AI-Document_search-.git
+cd AI-Document_search-/backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
 ```
 
-## Backend quickstart
+Open `http://localhost:8000/docs`. To use the web client, open `frontend/index.html` while the API is running.
 
-1. Create a virtual environment and install dependencies:
-   ```bash
-   cd backend
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   # Optional: testing tools
-   pip install -r requirements-dev.txt
-   ```
+## API
 
-2. Launch the API (reload enabled for local development):
-   ```bash
-   uvicorn app.main:app --reload
-   ```
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/health` | Health check |
+| POST | `/documents` | Ingest text |
+| POST | `/documents/upload` | Upload UTF-8 text |
+| GET | `/documents` | List documents |
+| GET | `/documents/{id}` | Read one document |
+| DELETE | `/documents/{id}` | Delete one document |
+| POST | `/search` | Search documents |
+| POST | `/documents/{id}/summary` | Extract summary sentences |
+| POST | `/documents/{id}/qa` | Extract an answer |
 
-3. Visit `http://localhost:8000/docs` for interactive OpenAPI documentation.
-
-### API highlights
-
-- `POST /documents` – ingest raw text via JSON payload
-- `POST /documents/upload` – upload UTF-8 text files
-- `GET /documents` – list stored documents with metadata previews
-- `GET /documents/{id}` – fetch full document content
-- `POST /search` – keyword-style semantic search with relevance scoring
-- `POST /documents/{id}/summary` – extract the top sentences for a document
-- `POST /documents/{id}/qa` – extractive question answering using sentence overlap
-
-A seed document is preloaded under `data/documents/` so you can experiment immediately.
-
-### Running tests
+## Tests
 
 ```bash
 cd backend
+pip install -r requirements-dev.txt
 python -m pytest
 ```
 
-If pytest fails because of a local Python tooling conflict (e.g., missing `pygments` styles), reinstall the offending dependency inside the virtual environment: `pip install --upgrade pygments`.
+## Limitations and roadmap
 
-## Frontend quickstart
-
-The `frontend/` folder contains a static client (HTML, CSS, vanilla JavaScript).
-
-1. Start the backend on `http://localhost:8000`.
-2. Open `frontend/index.html` in a browser.
-3. Upload text files, run free-text searches, preview summaries, and ask questions directly from the page.
-
-To deploy behind a different hostname or port, update `API_BASE` in `frontend/app.js`.
-
-## Extending the system
-
-- Swap the naive text analytics in `backend/app/services/text_analytics.py` with embeddings or LLM-backed pipelines.
-- Replace the JSON/flat file repository with a vector database or relational store.
-- Harden the frontend by bundling with your favourite framework (React, Vue, Svelte) and adding authentication.
-
-## Troubleshooting
-
-- **Uploads rejected:** Ensure files are UTF-8 encoded text (`.txt`, `.md`, `.json`).
-- **No answers returned:** Long-term memory recall relies on sentence overlap; try rephrasing or enriching documents with more context.
-- **Tests crash on import:** Activate the virtualenv so pytest and its dependencies are isolated from global site packages.
+Local flat-file persistence and open CORS are suitable for a demo, not production. Strong next steps are authentication, restricted CORS, a database, embeddings with a vector index, evaluation datasets, and CI.
