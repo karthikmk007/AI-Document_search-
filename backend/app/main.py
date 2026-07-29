@@ -83,7 +83,7 @@ def get_document(document_id: str) -> DocumentDetail:
     return _to_detail(document)
 
 
-@app.delete("/documents/{document_id}", status_code=204)
+@app.delete("/documents/{document_id}", status_code=204, response_model=None)
 def delete_document(document_id: str) -> None:
     _service.delete_document(document_id)
 

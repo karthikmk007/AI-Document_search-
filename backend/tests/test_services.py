@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from backend.app.models import Document
-from backend.app.repositories.document_repository import DocumentRepository
-from backend.app.services.text_analytics import answer_question, search_documents, summarize_text
+from app.models import Document
+from app.repositories.document_repository import DocumentRepository
+from app.services.text_analytics import answer_question, search_documents, summarize_text
 
 
 def test_document_repository_add_and_get(tmp_path):
